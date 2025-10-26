@@ -9,6 +9,7 @@ import base64
 import io
 import random
 from fastapi import FastAPI, HTTPException, Depends, status, BackgroundTasks, UploadFile, File, Request
+from fastapi.responses import JSONResponse, Response  # <-- ADD THIS IMPORT
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, validator
