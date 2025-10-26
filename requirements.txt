@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+python-dotenv
+google-generativeai
+supabase
+pyjwt
+razorpay
+python-multipart
+python-dateutil
+pillow
+requests
