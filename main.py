@@ -298,8 +298,12 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token", auto_error=False)
 async def get_current_user_id(token: str = Depends(oauth2_scheme)):
     """Dependency to decode and validate the Supabase JWT."""
     if not token:
-        # For testing, return a dummy user ID
-        return "test-user-id"
+        # This is the correct behavior for a protected endpoint
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     
     try:
         payload = jwt.decode(token, SUPABASE_JWT_SECRET, algorithms=["HS256"])
@@ -311,6 +315,8 @@ async def get_current_user_id(token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
     except Exception:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
+    
+
 
 # --- 7. DATABASE HELPER FUNCTIONS ---
 
@@ -1367,3 +1373,4 @@ if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
+
